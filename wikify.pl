@@ -282,19 +282,20 @@ sub parse
 
 sub render
 {
-	my $tt = Template->new({}) || die "$Template::ERROR\n";
+	my $tt = Template->new(
+	{
+		INCLUDE_PATH => 'templates/wiki',
+		RELATIVE     => 1,
+	}) || die "$Template::ERROR\n";
 
-	$tt->process(
-		 'templates/template-toc.txt',
-		\%playset,
-		"output/$playset{title}-toc.txt"
-	) || die $tt->error(), "\n";
+	my $rend = sub
+	{
+		my ($template, $outfile) = @_;
+		$tt->process($template, \%playset, $outfile) || die $tt->error(), "\n";
+	};
 
-	$tt->process(
-		'templates/template-elements.txt',
-		\%playset,
-		"output/$playset{title}-elements.txt"
-	) || die $tt->error(), "\n";
+	&$rend('playset-toc.txt', "output/$playset{title}-toc.txt");
+	&$rend('playset-elements.txt', "output/$playset{title}-elements.txt");
 }
 
 #============================================================
