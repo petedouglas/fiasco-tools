@@ -1,0 +1,22 @@
+__NOTOC__ [[Category:Playset]] [[Category:Playset/Month]] [[Category:Playset/BPG]] [[title::[% title %]| ]] [[releaseDate::| ]]
+Download PDF file: [[File:Icon-pdf.gif|16px|link=]]
+
+== Credits ==
+Written by [% credits.author %].
+
+== [% score.title %] ==[% FOREACH paragraph = score.paragraphs %]
+[% paragraph %][% END %]
+== Movie Night ==[% FOREACH movie = movie_night %]
+* [http://www.imdb.com/title/tt[% movie.code %]/ ''[% movie.title %]''][% END %]
+== Contents ==
+[[[% title %] Elements|Relationships, Objects, Needs, and Locations]]
+
+[[[% title %] InstaSetup|A ... INSTA-Setup]]
+
+[[[% title %] AP|Actual Play Reports]]
+== Boilerplate ==
+This playset is copyright © [% credits.author %]. All rights are reserved.
+
+This playset is an accessory for the [[Fiasco|''Fiasco'' role-playing game]] by Bully Pulpit Games.
+
+''Fiasco'' is copyright © 2009 by Jason Morningstar. All rights are reserved.
