@@ -253,8 +253,8 @@ sub parseElements
 	my $line = shift;
 	my @elements = ();
 
-	#1 Neighbours 2 Mutual outcasts 3 Best friends 4 Extremely unlikely friends 5 Keepers of a dark secret 6 Church friends
-	foreach (split(/[1|a] (.*) [2|b] (.*) [3|c] (.*) [4|d] (.*) [5|e] (.*) [6|f] (.*)/, $line))
+	#1 Neighbours 2 Mutual outcasts 3 Best friends 5 Extremely unlikely friends 5 Keepers of a dark secret 6 Church friends
+	foreach (split(/[123456|a] (.*) [123456|b] (.*) [123456|c] (.*) [123456|d] (.*) [123456|e] (.*) [123456|f] (.*)/, $line))
 	{
 		push @elements, trim($_) unless ($_ eq '');
 	}
