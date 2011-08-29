@@ -1,0 +1,4 @@
+[% FOREACH category = elements %]
+# [% category.name %][% h2.repeat(category.name.length + 2) %][% FOREACH element = category.elements %]
+## [% element %][% END %]
+[% END %]

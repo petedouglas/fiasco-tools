@@ -1,15 +1,11 @@
 __NOTOC__
 [[[%title%]|Return to playset top page.]]
-== Relationships ==[% FOREACH category = relationships %]
-# [% category.name %][% FOREACH element = category.elements %]
-## [% element %][% END %][% END %]
-== Needs ==[% FOREACH category = needs %]
-# [% category.name %][% FOREACH element = category.elements %]
-## [% element %][% END %][% END %]
-== Locations ==[% FOREACH category = locations %]
-# [% category.name %][% FOREACH element = category.elements %]
-## [% element %][% END %][% END %]
-== Objects ==[% FOREACH category = objects %]
-# [% category.name %][% FOREACH element = category.elements %]
-## [% element %][% END %][% END %]
+== Relationships ==
+[% INCLUDE elements.txt elements=relationships %]
+== Needs ==
+[% INCLUDE elements.txt elements=needs %]
+== Locations ==
+[% INCLUDE elements.txt elements=locations %]
+== Objects ==
+[% INCLUDE elements.txt elements=objects %]
 [[[%title%]|Return to playset top page.]]
