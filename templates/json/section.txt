@@ -1,0 +1,7 @@
+[% FOREACH category = section %]
+			{
+				"title" : "[% category.name %]",
+				"elements" : [[% FOREACH element = category.elements %]
+					"[% element %]"[% IF (loop.count != loop.size) %],[% END %][% END %]
+				]
+			}[% IF (loop.count != loop.size) %],[% END %][% END %]

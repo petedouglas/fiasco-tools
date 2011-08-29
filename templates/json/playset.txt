@@ -1,0 +1,28 @@
+{
+	"playset" :
+	{
+		"title" : "[% title %]",
+		"credits" : 
+		{
+			"author" : "[% credits.author %]"
+		},
+		"movie_night" :
+		[[% FOREACH movie = movie_night %]
+			{ "title" : "[% movie.title %]", "imdb_code" : "[% movie.code %]" }[% IF (loop.count != loop.size) %],[% END %][% END %]
+		],
+		"score" :
+		{
+			"title" : "[% score.title %]",
+			"paragraphs" : [[% FOREACH paragraph = score.paragraphs %]
+"[% paragraph %]"[% END %]]
+		},
+		"relationships" : [[% INCLUDE section.txt section=relationships %]
+		],
+		"needs" : [[% INCLUDE section.txt section=needs %]
+		],
+		"locations" : [[% INCLUDE section.txt section=locations %]
+		],
+		"objects" : [[% INCLUDE section.txt section=objects %]
+		]
+	}
+}

@@ -307,11 +307,11 @@ sub render_json
 {
 	my $engine = Template->new(
 	{
-		INCLUDE_PATH => 'templates',
+		INCLUDE_PATH => 'templates/json',
 		RELATIVE     => 1,
 	}) || die "$Template::ERROR\n";
 
-	_render($engine, 'playset-json.txt', "output/$playset{title}.json");
+	_render($engine, 'playset.txt', "output/$playset{title}.json");
 }
 
 sub _render
