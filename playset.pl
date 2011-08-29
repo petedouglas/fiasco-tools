@@ -262,7 +262,7 @@ sub parseElements
 }
 
 #============================================================
-#      PARSING
+#      MAIN
 #============================================================
 
 sub parse
@@ -283,35 +283,21 @@ sub parse
 sub render_wiki
 {
 	my ($engine) = @_;
-	_render($engine, 'playset-toc.txt', "output/$playset{title}-toc.txt");
-	_render($engine, 'playset-elements.txt', "output/$playset{title}-elements.txt");
+	render($engine, 'playset-toc.txt', "output/$playset{title}-toc.txt");
+	render($engine, 'playset-elements.txt', "output/$playset{title}-elements.txt");
 }
 
-sub render_restructured_text
-{
-	_render(shift, 'playset.txt', "output/$playset{title}-rst.txt");
-}
-
-sub render_json
-{
-	_render(shift, 'playset.txt', "output/$playset{title}.json");
-}
-
-sub _render
+sub render
 {
 	my ($engine, $template, $outfile) = @_;
 	$engine->process($template, \%playset, $outfile) || die $engine->error(), "\n";
 };
 
-#============================================================
-#      MAIN
-#============================================================
-
 my %formats =
 (
-	wiki        => \&render_wiki,
-	json        => \&render_json,
-	rst         => \&render_restructured_text,
+	wiki  => \&render_wiki,
+	json  => sub { render(shift, 'playset.txt', "output/$playset{title}.json"); },
+	rst   => sub { render(shift, 'playset.txt', "output/$playset{title}-rst.txt"); }
 );
 
 my $format = shift || 'wiki';
