@@ -282,36 +282,19 @@ sub parse
 
 sub render_wiki
 {
-	my $engine = Template->new(
-	{
-		INCLUDE_PATH => 'templates/wiki',
-		RELATIVE     => 1,
-	}) || die "$Template::ERROR\n";
-
+	my ($engine) = @_;
 	_render($engine, 'playset-toc.txt', "output/$playset{title}-toc.txt");
 	_render($engine, 'playset-elements.txt', "output/$playset{title}-elements.txt");
 }
 
 sub render_restructured_text
 {
-	my $engine = Template->new(
-	{
-		INCLUDE_PATH => 'templates/rst',
-		RELATIVE     => 1,
-	}) || die "$Template::ERROR\n";
-
-	_render($engine, 'playset.txt', "output/$playset{title}-rst.txt");
+	_render(shift, 'playset.txt', "output/$playset{title}-rst.txt");
 }
 
 sub render_json
 {
-	my $engine = Template->new(
-	{
-		INCLUDE_PATH => 'templates/json',
-		RELATIVE     => 1,
-	}) || die "$Template::ERROR\n";
-
-	_render($engine, 'playset.txt', "output/$playset{title}.json");
+	_render(shift, 'playset.txt', "output/$playset{title}.json");
 }
 
 sub _render
@@ -341,7 +324,12 @@ while ( defined (my $file = readdir $dh) )
 	parse("sources/$file");
 	if ( exists $formats{$format} )
 	{
-		$formats{$format}->();
+		my $engine = Template->new(
+		{
+			INCLUDE_PATH => "templates/$format",
+			RELATIVE     => 1,
+		}) || die "$Template::ERROR\n";
+		$formats{$format}->($engine);
 	}
 	print "Processed '$playset{title}'.\n";
 }
