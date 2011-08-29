@@ -1,0 +1,6 @@
+[% FOREACH category = elements %]
+[% loop.count %] [% category.name %]
+[% h2.repeat(category.name.length + 2) %]
+[% FOREACH element = category.elements %]
+[% loop.count %]. [% element %][% END %]
+[% END %]
