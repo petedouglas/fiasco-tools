@@ -305,33 +305,29 @@ my %formats =
 	rst   => sub { render(shift, 'playset.txt', "output/$playset{title}-rst.txt"); }
 );
 
-my $format = shift || 'wiki';
-my @formats = ();
-if ($format eq 'all')
+my @formats = (shift || 'wiki');
+if ($formats[0] eq 'all')
 {
-	foreach $format (keys %formats)	{	push(@formats, $format); }
-} 
-else
-{
-	push(@formats, $format);
+	pop @formats;
+	foreach my $format (keys %formats)	{	push(@formats, $format); }
 }
 
 opendir(my $dh, 'sources') || die;
 while ( defined (my $file = readdir $dh) )
 {
 	next if $file =~ /^\.\.?$/;
-	foreach $format (@formats) 
+	init();
+	parse("sources/$file");
+	foreach my $format (@formats)
 	{
+		next unless (exists $formats{$format});
 		my $engine = Template->new(
 		{
 			INCLUDE_PATH => "templates/$format",
 			RELATIVE     => 1,
 		}) || die "$Template::ERROR\n";
-	
-		init();
-		parse("sources/$file");
 		$formats{$format}->($engine);
 	}
-	print "Processed '$playset{title}'.\n";
+	print "Processed '$playset{title}'\n";
 }
 closedir $dh;
