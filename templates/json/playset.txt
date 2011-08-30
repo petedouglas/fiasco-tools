@@ -8,7 +8,7 @@
 		},
 		"movie_night" :
 		[[% FOREACH movie = movie_night %]
-			{ "title" : "[% movie.title %]", "imdb_code" : "[% movie.code %]" }[% IF (loop.count != loop.size) %],[% END %][% END %]
+			{ "title" : "[% movie.title %]" }[% IF (loop.count != loop.size) %],[% END %][% END %]
 		],
 		"score" :
 		{

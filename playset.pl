@@ -115,6 +115,11 @@ sub movieNight
 			if ($_ ne '' and $line !~ /MOVIE NIGHT/i)
 			{
 				my $title = trim($_);
+				# remove any pesky trailing period (screws up IMDB search)
+				if (substr($title, -1, 1) eq '.')
+				{
+					chop $title;
+				}
 				my $code = '';
 				# eval {
 					# my $imdb = new IMDB::Film(
@@ -301,20 +306,30 @@ my %formats =
 );
 
 my $format = shift || 'wiki';
+my @formats = ();
+if ($format eq 'all')
+{
+	foreach $format (keys %formats)	{	push(@formats, $format); }
+} 
+else
+{
+	push(@formats, $format);
+}
 
 opendir(my $dh, 'sources') || die;
 while ( defined (my $file = readdir $dh) )
 {
 	next if $file =~ /^\.\.?$/;
-	init();
-	parse("sources/$file");
-	if ( exists $formats{$format} )
+	foreach $format (@formats) 
 	{
 		my $engine = Template->new(
 		{
 			INCLUDE_PATH => "templates/$format",
 			RELATIVE     => 1,
 		}) || die "$Template::ERROR\n";
+	
+		init();
+		parse("sources/$file");
 		$formats{$format}->($engine);
 	}
 	print "Processed '$playset{title}'.\n";
