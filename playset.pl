@@ -49,8 +49,25 @@ my %states =
 sub the_title
 {
 	shift =~ /.*\d+\s+(.*)/; # JM07 LUCKY STRIKE
-	$playset{title} = caseForHeader($1);
+	$playset{title} = convert_to_header_case($1);
 	'NEXT';
+}
+
+sub the_tagline
+{
+	my ($line, $context) = @_;
+	if ($playset{score}->{tagline} eq '')
+	{
+		if ($line =~ /^\.\.\.(.*)/) #...all the damn time
+		{
+			my $tagline = convert_to_header_case(trim($1));
+			if ($tagline ne '')
+			{
+				$playset{score}->{tagline} = $tagline;
+			}
+		}
+	}
+	$context->{CODE}->($line, $context);
 }
 
 sub credits
@@ -88,13 +105,13 @@ sub the_score
 		}
 		else
 		{
-			$playset{score}->{title} = caseForHeader($line);
+			$playset{score}->{title} = convert_to_header_case($line);
 		}
 	}
 	$next;
 }
 
-sub caseForHeader
+sub convert_to_header_case
 {
 	my $line = shift;
 	my @items = ();
@@ -282,7 +299,8 @@ sub parse
 		chomp;
 		my $context = {};
 		my $state = $states{$state_name};
-		my $next = $state->{CODE}->($_, $context);
+		$context->{CODE} = $state->{CODE};
+		my $next = the_tagline($_, $context);
 		$state_name = (exists $state->{$next}) ? $state->{$next} : $next;
 	}
 	close SOURCE;

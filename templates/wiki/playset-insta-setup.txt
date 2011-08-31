@@ -2,7 +2,7 @@ __NOTOC__
 [[[% title %]|Return to playset top page.]]
 == A  INSTA-Setup for the [% title %] playset ==
 
-=== Relationships In  ===
+=== Relationships [% score.tagline %] ===
 '''For three players...'''
 * 
 * 
@@ -11,17 +11,17 @@ __NOTOC__
 * 
 '''For five players, add...'''
 * 
-=== Needs In  ===
+=== Needs [% score.tagline %]  ===
 '''For three players...'''
 * 
 '''For four or five players, add...'''
 * 
-=== Locations In  ===
+=== Locations [% score.tagline %]  ===
 '''For three or four players...'''
 * 
 '''For five players, add...'''
 * 
-=== Objects In  ===
+=== Objects [% score.tagline %]  ===
 '''For three, four or five players...'''
 * 
 
