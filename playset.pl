@@ -14,7 +14,7 @@ sub init
 	(
 		title						=> '',
 		credits         => {},
-		score           => { title => undef, paragraphs => []},
+		score           => { title => undef, paragraphs => [], tagline => '' },
 		movie_night     => [],
 		relationships   => [],
 		needs           => [],
@@ -29,24 +29,24 @@ sub init
 
 my %states =
 (
-	THE_TITLE               =>   { CODE => \&theTitle, NEXT => 'CREDITS' },
+	THE_TITLE               =>   { CODE => \&the_title, NEXT => 'CREDITS' },
 	CREDITS                 =>   { CODE => \&credits, NEXT => 'THE_SCORE' },
-	THE_SCORE               =>   { CODE => \&theScore, NEXT => 'MOVIE_NIGHT' },
-	MOVIE_NIGHT             =>   { CODE => \&movieNight, NEXT => 'RELATIONSHIP_CATEGORY' },
+	THE_SCORE               =>   { CODE => \&the_score, NEXT => 'MOVIE_NIGHT' },
+	MOVIE_NIGHT             =>   { CODE => \&movie_night, NEXT => 'RELATIONSHIP_CATEGORY' },
 	
-	RELATIONSHIP_CATEGORY   =>   { CODE => \&relationshipsCategory, NEXT => 'NEEDS_CATEGORY' },
-	RELATIONSHIP_ELEMENTS   =>   { CODE => \&relationshipsElements, NEXT => 'RELATIONSHIP_CATEGORY' },
-	NEEDS_CATEGORY          =>   { CODE => \&needsCategory, NEXT => 'LOCATIONS_CATEGORY' },
-	NEEDS_ELEMENTS          =>   { CODE => \&needsElements, NEXT => 'NEEDS_CATEGORY' },
-	LOCATIONS_CATEGORY      =>   { CODE => \&locationsCategory, NEXT => 'OBJECTS_CATEGORY' },
-	LOCATIONS_ELEMENTS      =>   { CODE => \&locationsElements, NEXT => 'LOCATIONS_CATEGORY' },
-	OBJECTS_CATEGORY        =>   { CODE => \&objectsCategory, NEXT => 'NOOP' },
-	OBJECTS_ELEMENTS        =>   { CODE => \&objectsElements, NEXT => 'OBJECTS_CATEGORY' },
+	RELATIONSHIP_CATEGORY   =>   { CODE => \&relationships_category, NEXT => 'NEEDS_CATEGORY' },
+	RELATIONSHIP_ELEMENTS   =>   { CODE => \&relationships_elements, NEXT => 'RELATIONSHIP_CATEGORY' },
+	NEEDS_CATEGORY          =>   { CODE => \&needs_category, NEXT => 'LOCATIONS_CATEGORY' },
+	NEEDS_ELEMENTS          =>   { CODE => \&needs_elements, NEXT => 'NEEDS_CATEGORY' },
+	LOCATIONS_CATEGORY      =>   { CODE => \&locations_category, NEXT => 'OBJECTS_CATEGORY' },
+	LOCATIONS_ELEMENTS      =>   { CODE => \&locations_elements, NEXT => 'LOCATIONS_CATEGORY' },
+	OBJECTS_CATEGORY        =>   { CODE => \&objects_category, NEXT => 'NOOP' },
+	OBJECTS_ELEMENTS        =>   { CODE => \&objects_elements, NEXT => 'OBJECTS_CATEGORY' },
 	
 	NOOP                    =>   { CODE => sub { 'NEXT'; }, NEXT => 'NOOP' },
 );
 
-sub theTitle
+sub the_title
 {
 	shift =~ /.*\d+\s+(.*)/; # JM07 LUCKY STRIKE
 	$playset{title} = caseForHeader($1);
@@ -73,12 +73,15 @@ sub credits
 	$next;
 }
 
-sub theScore
+sub the_score
 {
-	my ($line, $next) = (shift, 'NEXT');
-	if ($line !~ /MOVIE NIGHT/i && $line ne '')
+	my ($line, $next) = (shift, 'THE_SCORE');
+	if ($line =~ /MOVIE NIGHT/i)
 	{
-		$next = 'THE_SCORE';
+		$next = 'MOVIE_NIGHT';
+	}
+	elsif ($line ne '')
+	{
 		if (defined($playset{score}->{title}))
 		{
 			push @{$playset{score}->{paragraphs}}, $line;
@@ -102,7 +105,7 @@ sub caseForHeader
 	join(' ', @items);
 }
 
-sub movieNight
+sub movie_night
 {
 	my ($line, $next) = (shift, 'NEXT');
 	if ($line ne '' && $line !~ /RELATIONSHIPS/i)
@@ -138,7 +141,7 @@ sub movieNight
 	$next;
 }
 
-sub relationshipsCategory
+sub relationships_category
 {
 	my ($line, $context) = @_;
 	$context->{next_state_root} = 'RELATIONSHIP';
@@ -147,7 +150,7 @@ sub relationshipsCategory
 	category($line, $context);
 }
 
-sub relationshipsElements
+sub relationships_elements
 {
 	my ($line, $context) = @_;
 	$context->{section} = $playset{relationships};
@@ -156,7 +159,7 @@ sub relationshipsElements
 	elements($line, $context);
 }
 
-sub needsCategory
+sub needs_category
 {
 	my ($line, $context) = @_;
 	$context->{next_state_root} = 'NEEDS';
@@ -165,7 +168,7 @@ sub needsCategory
 	category($line, $context);
 }
 
-sub needsElements
+sub needs_elements
 {
 	my ($line, $context) = @_;
 	$context->{section} = $playset{needs};
@@ -174,7 +177,7 @@ sub needsElements
 	elements($line, $context);
 }
 
-sub locationsCategory
+sub locations_category
 {
 	my ($line, $context) = @_;
 	$context->{next_state_root} = 'LOCATIONS';
@@ -183,7 +186,7 @@ sub locationsCategory
 	category($line, $context);
 }
 
-sub locationsElements
+sub locations_elements
 {
 	my ($line, $context) = @_;
 	$context->{section} = $playset{locations};
@@ -192,7 +195,7 @@ sub locationsElements
 	elements($line, $context);
 }
 
-sub objectsCategory
+sub objects_category
 {
 	my ($line, $context) = @_;
 	$context->{next_state_root} = 'OBJECTS';
@@ -201,7 +204,7 @@ sub objectsCategory
 	category($line, $context);
 }
 
-sub objectsElements
+sub objects_elements
 {
 	my ($line, $context) = @_;
 	$context->{section} = $playset{objects};
@@ -240,7 +243,7 @@ sub elements
 
 	if ($line ne '')
 	{
-		$section->[$#{$section}]->{elements} = parseElements($line);
+		$section->[$#{$section}]->{elements} = parse_elements($line);
 		$next = 'NEXT';
 	}
 	$next;
@@ -253,7 +256,7 @@ sub trim
 	$line;
 }
 
-sub parseElements
+sub parse_elements
 {
 	my $line = shift;
 	my @elements = ();
@@ -290,6 +293,7 @@ sub render_wiki
 	my ($engine) = @_;
 	render($engine, 'playset-toc.txt', "output/$playset{title}-toc.txt");
 	render($engine, 'playset-elements.txt', "output/$playset{title}-elements.txt");
+	render($engine, 'playset-insta-setup.txt', "output/$playset{title}-insta-setup.txt");
 }
 
 sub render
