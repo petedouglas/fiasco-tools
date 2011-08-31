@@ -1,7 +1,7 @@
 __NOTOC__ [[Category:Playset]] [[Category:Playset/Month]] [[Category:Playset/BPG]] [[title::[% title %]| ]] [[releaseDate::| ]]
 Download PDF file: [[File:Icon-pdf.gif|16px|link=]]
 == Credits ==
-Written by [% credits.author %].
+Written by [% FOREACH author = credits.authors %][% author %][% IF (loop.count != loop.size) %], [% END %][% END %].
 == [% score.title %] ==[% FOREACH paragraph = score.paragraphs %]
 [% paragraph %][% END %]
 == Movie Night ==[% FOREACH movie = movie_night %]

@@ -5,7 +5,7 @@
 Credits
 -------
 
-Written by [% credits.author %].
+Written by [% FOREACH author = credits.authors %][% author %][% IF (loop.count != loop.size) %], [% END %][% END %].
 
 Boilerplate
 -----------

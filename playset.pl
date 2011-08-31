@@ -13,7 +13,7 @@ sub init
 	%playset = 
 	(
 		title						=> '',
-		credits         => {},
+		credits         => { authors => [], editors => [], licence => undef },
 		score           => { title => undef, paragraphs => [], tagline => '' },
 		movie_night     => [],
 		relationships   => [],
@@ -84,7 +84,7 @@ sub credits
 		my $author = trim($1);
 		if($author ne '')
 		{
-			$playset{credits}->{author} = $author;
+			push @{$playset{credits}->{authors}}, $author;
 		}
 	}
 	$next;

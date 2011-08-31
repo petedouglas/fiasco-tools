@@ -4,7 +4,9 @@
     "title" : "[% title %]",
     "credits" : 
     {
-      "author" : "[% credits.author %]"
+      "authors" : [ [% FOREACH author = credits.authors %]"[% author %]"[% IF (loop.count != loop.size) %], [% END %][% END %] ],
+      "editors" : [ [% FOREACH editor = credits.editors %]"[% editor %]"[% IF (loop.count != loop.size) %], [% END %][% END %] ],
+      "licence" : ""
     },
     "movie_night" :
     [[% FOREACH movie = movie_night %]
