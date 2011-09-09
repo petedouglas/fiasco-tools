@@ -141,16 +141,16 @@ sub movie_night
 					chop $title;
 				}
 				my $code = '';
-				# eval {
-					# my $imdb = new IMDB::Film(
-						# crit        => $title,
+				eval {
+					my $imdb = IMDB::Film->new(
+						crit        => $title,
 
-						# cache		    => 1,
-						# cache_root	=> './tmp/imdb_cache',
-						# cache_exp	  => '7 d',
-					# );
-					# $code = $imdb->code();
-				# };
+						cache		    => 1,
+						cache_root	=> './tmp/imdb_cache',
+						cache_exp	  => '7 d',
+					);
+					$code = $imdb->code();
+				};
 				push @{$playset{movie_night}}, { title => $title, code => $code };
 			}
 		}
@@ -260,7 +260,7 @@ sub elements
 
 	if ($line ne '')
 	{
-		$section->[$#{$section}]->{elements} = parse_elements($line);
+		$section->[-1]->{elements} = parse_elements($line);
 		$next = 'NEXT';
 	}
 	$next;
@@ -293,8 +293,8 @@ sub parse_elements
 sub parse
 {
 	my ($file, $state_name) = (shift, 'THE_TITLE');
-	open SOURCE, $file or die $!;
-	while (<SOURCE>)
+	open my $source, q{<}, $file or die $!;
+	while (<$source>)
 	{
 		chomp;
 		my $context = {};
@@ -303,7 +303,7 @@ sub parse
 		my $next = the_tagline($_, $context);
 		$state_name = (exists $state->{$next}) ? $state->{$next} : $next;
 	}
-	close SOURCE;
+	close $source;
 }
 
 sub render_wiki
