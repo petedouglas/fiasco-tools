@@ -1,7 +1,7 @@
 [% FOREACH category = section %]
 			{
-				"title" : "[% category.name %]",
+				"title" : "[% category.name | replace('"', '\"') %]",
 				"elements" : [[% FOREACH element = category.elements %]
-					"[% element %]"[% IF (loop.count != loop.size) %],[% END %][% END %]
+					"[% element | replace('"', '\"') %]"[% IF (loop.count != loop.size) %],[% END %][% END %]
 				]
 			}[% IF (loop.count != loop.size) %],[% END %][% END %]

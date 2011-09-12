@@ -48,8 +48,8 @@ my %states =
 
 sub the_title
 {
-	shift =~ /.*\d+\s+(.*)/; # JM07 LUCKY STRIKE
-	$playset{title} = convert_to_header_case($1);
+	shift =~ /(.*\d+)\s+(.*)/; # JM07 LUCKY STRIKE
+	$playset{title} = convert_to_header_case($2);
 	'NEXT';
 }
 
@@ -141,16 +141,16 @@ sub movie_night
 					chop $title;
 				}
 				my $code = '';
-				eval {
-					my $imdb = IMDB::Film->new(
-						crit        => $title,
+				# eval {
+					# my $imdb = IMDB::Film->new(
+						# crit        => $title,
 
-						cache		    => 1,
-						cache_root	=> './tmp/imdb_cache',
-						cache_exp	  => '7 d',
-					);
-					$code = $imdb->code();
-				};
+						# cache		    => 1,
+						# cache_root	=> './tmp/imdb_cache',
+						# cache_exp	  => '7 d',
+					# );
+					# $code = $imdb->code();
+				# };
 				push @{$playset{movie_night}}, { title => $title, code => $code };
 			}
 		}
@@ -317,7 +317,7 @@ sub render_wiki
 sub render
 {
 	my ($engine, $template, $outfile) = @_;
-	$engine->process($template, \%playset, $outfile) || die $engine->error(), "\n";
+	$engine->process($template, \%playset, $outfile, binmode => ':utf8') || die $engine->error(), "\n";
 };
 
 my %formats =
@@ -350,6 +350,6 @@ while ( defined (my $file = readdir $dh) )
 		}) || die "$Template::ERROR\n";
 		$formats{$format}->($engine);
 	}
-	print "Processed '$playset{title}'\n";
+	print "Processed '$playset{title}' : '$playset{score}->{tagline}'\n";
 }
 closedir $dh;
