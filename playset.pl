@@ -1,7 +1,7 @@
 use strict;
+use warnings;
 use Data::Dumper;
 use Template;
-use IMDB::Film;
 
 #============================================================
 #      DATA
@@ -12,7 +12,7 @@ sub init
 {
 	%playset = 
 	(
-		title						=> '',
+		title		=> '',
 		credits         => { authors => [], editors => [], licence => undef },
 		score           => { title => undef, paragraphs => [], tagline => '' },
 		movie_night     => [],
@@ -140,17 +140,7 @@ sub movie_night
 				{
 					chop $title;
 				}
-				my $code = '';
-				# eval {
-					# my $imdb = IMDB::Film->new(
-						# crit        => $title,
-
-						# cache		    => 1,
-						# cache_root	=> './tmp/imdb_cache',
-						# cache_exp	  => '7 d',
-					# );
-					# $code = $imdb->code();
-				# };
+				my $code = ''; # TODO use IMDB::Film
 				push @{$playset{movie_night}}, { title => $title, code => $code };
 			}
 		}
